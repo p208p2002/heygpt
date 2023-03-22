@@ -5,7 +5,7 @@ use std::env;
 use std::fs;
 use std::io::{self, Write};
 use std::path::PathBuf;
-
+use std::process::exit;
 #[derive(Serialize, Deserialize, Debug, Clone)]
 struct Message {
     role: String,
@@ -60,32 +60,60 @@ impl ChatManager {
     }
 }
 
-fn main() {
-    let args: Vec<String> = env::args().collect();
-    let mut openai_api_key;
-
-    // use api token while given
-    if args.len() >= 2 {
-        openai_api_key = args[1].clone();
-    }
-    // else find under ~/.chatgpt_token
-    else {
-        let mut path = PathBuf::from(std::env::var("HOME").unwrap());
-        path.push(".chatgpt_token");
-        // let contents = fs::read_to_string(path).expect("Should have been able to read ~/.chatgpt_token");
-        let contents = fs::read_to_string(path);
-        let contents = match contents{
-            Ok(context)=>context,
-            Err(err)=>panic!("~/.chatgpt_token not exist => {err}")
-        };
-        
-        openai_api_key = contents.clone();
-        openai_api_key = openai_api_key.trim().to_string();
-    }
-
-    let user_label = "[🤓]:".blue();
-    let chat_gpt_label = "[🤖]:".red();
+fn call_chat_gpt(messages:&Vec<Message>) -> String {
+    // api endpoint
     let endpoint = String::from("https://api.openai.com/v1/chat/completions");
+     
+     // get openai api key from HOME_PATH
+     let mut openai_api_key;
+     let mut path = PathBuf::from(std::env::var("HOME").unwrap());
+     path.push(".chatgpt_token");
+     // let contents = fs::read_to_string(path).expect("Should have been able to read ~/.chatgpt_token");
+     let contents = fs::read_to_string(path);
+     let contents = match contents {
+         Ok(context) => context,
+         Err(err) => panic!("~/.chatgpt_token not exist => {err}"),
+     };
+     openai_api_key = contents.clone();
+     openai_api_key = openai_api_key.trim().to_string();
+
+    let playload = ChatGptRequest {
+        model: String::from("gpt-3.5-turbo"),
+        messages: messages.to_vec(),
+    };
+
+    let client = Client::new();
+    let response = client
+        .post(&endpoint)
+        .header("Content-Type", "application/json")
+        .header("Authorization", format!("Bearer {}", openai_api_key))
+        .json(&playload)
+        .send()
+        .unwrap();
+
+    let response_result: ChatGptResponse = serde_json::from_str(&response.text().unwrap()).unwrap();
+    let response_content = response_result.choices[0].message.content.trim().to_string();
+    return  response_content;
+}
+
+
+fn main() {
+    // quick chat
+    let quick_chat;
+    let args: Vec<String> = env::args().collect();
+    if args.len() >= 2 {
+        quick_chat = args[1].clone();
+        let messages = vec![Message{role:String::from("user"),content:quick_chat}];
+        let response_content = call_chat_gpt(&messages);
+        println!("{response_content}");
+        exit(0);
+    }
+
+
+    // go into a chat loop
+    let user_label = "[👦]:".blue();
+    let chat_gpt_label = "[🤖]:".red();
+    // let endpoint = String::from("https://api.openai.com/v1/chat/completions");
     let mut cm: ChatManager = ChatManager::new();
 
     loop {
@@ -103,23 +131,7 @@ fn main() {
         };
         cm.messages.push(new_message);
 
-        // api request
-        let playload = ChatGptRequest {
-            model: String::from("gpt-3.5-turbo"),
-            messages: cm.messages.to_vec(),
-        };
-        let client = Client::new();
-        let response = client
-            .post(&endpoint)
-            .header("Content-Type", "application/json")
-            .header("Authorization", format!("Bearer {}", openai_api_key))
-            .json(&playload)
-            .send()
-            .unwrap();
-
-        let response_result: ChatGptResponse =
-            serde_json::from_str(&response.text().unwrap()).unwrap();
-        let response_content = response_result.choices[0].message.content.trim();
+        let response_content = call_chat_gpt(&cm.messages);
 
         println!("{chat_gpt_label} {response_content}");
 

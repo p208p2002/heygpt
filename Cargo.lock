@@ -599,7 +599,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "rust-chatgpt-tui"
+name = "rust-chatgpt-cli"
 version = "0.1.0"
 dependencies = [
  "colored",
