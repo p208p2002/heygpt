@@ -602,6 +602,7 @@ dependencies = [
 name = "rust-chatgpt-cli"
 version = "0.1.0"
 dependencies = [
+ "atty",
  "colored",
  "reqwest",
  "serde",

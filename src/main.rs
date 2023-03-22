@@ -3,10 +3,12 @@ use reqwest::blocking::Client;
 use serde::{Deserialize, Serialize};
 use std::env;
 use std::fs;
-use std::io::{self, Write};
+use std::io::{self, Write, BufRead};
 use std::path::PathBuf;
 use std::process::exit;
 use std::time::Duration;
+use atty::Stream;
+
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 struct Message {
@@ -62,6 +64,25 @@ impl ChatManager {
     }
 }
 
+fn read_pipe()->String{
+    // No pipe input detected 
+    if atty::is(Stream::Stdin) {
+        return String::new();
+    }
+
+    // read from pipe
+    let stdin = io::stdin();
+    let mut stdin_lines = String::new();
+    
+    for line in stdin.lock().lines() {
+        let mut line = line.expect("Could not read line from standard in");
+        line.push_str("\n");
+        stdin_lines.push_str(&line);
+    }
+
+    return stdin_lines;
+}
+
 fn call_chat_gpt(messages: &Vec<Message>) -> String {
     // api endpoint
     let endpoint = String::from("https://api.openai.com/v1/chat/completions");
@@ -107,9 +128,30 @@ fn call_chat_gpt(messages: &Vec<Message>) -> String {
 }
 
 fn main() {
+    // read args
+    let args: Vec<String> = env::args().collect();
+    
+    // stdin from pipe
+    let std_lines = read_pipe();
+    if std_lines.len()>0{
+        let mut action:String = String::new();
+        if args.len()>1{
+            action = args[1].clone();
+            
+        }
+        let content:String = format!("{action}\n{std_lines}");
+
+        let messages = vec![Message {
+            role: String::from("user"),
+            content: content,
+        }];
+        let response_content = call_chat_gpt(&messages);
+        println!("{response_content}");
+        exit(0);
+    }
+
     // quick chat
     let quick_chat;
-    let args: Vec<String> = env::args().collect();
     if args.len() >= 2 {
         quick_chat = args[1].clone();
         let messages = vec![Message {
