@@ -1,46 +1,57 @@
 # HeyGPT
-
-這是一個簡單的命令行接口工具，允許您與來自OpenAI的GPT-3互動。
+這是一個簡單的命令行介面工具，讓您可以與OpenAI的ChatGPT進行互動。
 
 您可以使用它來：
-- 與GPT-3聊天並獲得回覆
-- 快速與GPT-3聊天並獲得回覆
-- 將文本從另一個命令輸入到HeyGpt中並獲得回應
-
+- 與ChatGPT聊天並獲得回應
+- 快速聊天並獲得回應
+- 將文本從另一個命令輸出到HeyGpt並獲得回應
 
 ## 要求
-
-- 當前，要使用HeyGpt，您需要從OpenAI獲取API密鑰。您可以在他們的網站上註冊。
-- 您需要安裝Rust才能編譯和使用HeyGpt。
-
-
-## 安裝
-
-1. 複製存儲庫
-
-`git clone https://github.com/DominikN/HeyGPT.git`
-
-2. 運行執行檔
-
-`cargo run`
-
-或者，您可以使用`cargo build`構建可執行文件，然後將其移動到您的“ bin”文件夾中。
-
+目前，要使用HeyGpt，您需要從OpenAI獲得API密鑰。您可以在其網站上註冊。
 
 ## 用法
+請注意，在初始化期間，您將收到要求輸入OpenAI API密鑰的提示，因此請確保已經準備好。
 
-- 要與GPT-3聊天，只需輸入您的消息並按Enter鍵。
-- 要快速與GPT-3聊天，請使用快速聊天命令`cargo run“您的快速聊天消息”`
-- 要從另一個命令傳遞文本，請使用管道`|`字符，然後是`cargo run`，如下所示：
-        `echo“ hello”| cargo run`
-- 要初始化您的HeyGpt配置，請使用“ init”命令：
-        `cargo run init`
+您也可以修改位於您的主目錄中的`.heygpt-config`的配置文件。
 
-請注意，在初始化期間，您將被提示輸入您的OpenAI API密鑰，因此請確保您已準備好該密鑰。
+- 要初始化您的HeyGpt配置，請使用`init`命令：
+```bash
+$ heygpt init
+```
 
-您還可以修改位於主目錄中的`.heygpt-config`的配置文件。
+- 要與ChatGPT聊天，只需執行`heygpt`，然後輸入您的消息並按Enter鍵。
+```bash 
+$ heygpt
+```
+- 要快速聊天與HeyGpt，請使用快速聊天命令
+```bash
+$ heygpt "如何查找我的ID地址" # 回复將根据您的系統而异。
+```
 
+- 要從另一個命令輸出文本，請使用管道`|`字符後跟`heygpt`，如下所示：
 
-## 許可證
+```bash
+$ vim --help | heygpt "翻譯成繁體中文" # 將cli工具說明消息翻譯
+```
+```bash
+$ cat main.py | heygpt "為此腳本編寫README.md" >> README.md # 為某些腳本生成文檔
+```
 
-該項目根據MIT許可證許可 - 請參閱[ LICENSE ](LICENSE)文件以了解詳細信息。
+## 安裝
+需要安裝Rust
+```bash
+$ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+### 從源碼構建
+1. 克隆存儲庫
+2. 執行可執行文件 `cargo build --release`
+3. 將 `target/release/heygpt` 複製到 `/usr/local/bin`
+
+### macOS
+即將推出
+
+### Debian/Ubuntu
+即將推出
+
+### Windows
+即將推出
