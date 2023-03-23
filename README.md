@@ -47,36 +47,13 @@ $ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ### Debian/Ubuntu
 ```bash
 $ sudo apt-get update
-$ sudo apt-get install build-essential pkg-config openssl libssl-dev
+$ sudo apt-get install build-essential pkg-config openssl libssl-dev curl git
 $ curl https://raw.githubusercontent.com/p208p2002/heygpt/main/setup.sh | sh
 ```
 
 ### macOS
-```bash
-$ brew install pkg-config
-$ curl https://raw.githubusercontent.com/p208p2002/heygpt/main/setup.sh | sh
-```
+Comming soon
 
 ### Windows
 Comming soon
-
-### From Srouce
-1. Clone this repository by running the following command in your terminal:
-
-```
-git clone https://github.com/p208p2002/heygpt.git
-```
-
-2. Navigate to the heygpt directory and run the following command to build HeyGPT:
-
-```
-cargo build --release
-```
-
-3. Copy the resulting binary file from target/release/heygpt to /usr/local/bin by running the following command:
-
-```
-sudo cp target/release/heygpt /usr/local/bin
-```
-
 
