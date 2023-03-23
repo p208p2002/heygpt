@@ -1,5 +1,5 @@
 # HeyGPT
-This is a simple command-line interface tool that allows you to interact with Chat GPT from OpenAI.
+This is a simple command-line interface tool that allows you to interact with ChatGPT from OpenAI.
 
 You can use it to:
 - Chat with ChatGPT and get responses
