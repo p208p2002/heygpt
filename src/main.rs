@@ -1,14 +1,16 @@
+use atty::Stream;
 use colored::Colorize;
+use dirs;
 use reqwest::blocking::Client;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 use std::env;
 use std::fs;
-use std::io::{self, Write, BufRead};
-use std::path::PathBuf;
+use std::io::{self, BufRead, Write};
+use std::path::{Path};
 use std::process::exit;
 use std::time::Duration;
-use atty::Stream;
-
+use toml;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 struct Message {
@@ -64,8 +66,48 @@ impl ChatManager {
     }
 }
 
-fn read_pipe()->String{
-    // No pipe input detected 
+fn init_app_config() {
+    //allow user create a app config
+    let args: Vec<String> = env::args().collect();
+    if args.len() == 2 && args[1] == "init" {
+        
+        let home_dir = dirs::home_dir()
+            .unwrap()
+            .into_os_string()
+            .into_string()
+            .unwrap();
+        let file_path = Path::new(&home_dir).join(".heygpt-config");
+
+        println!("Paste your opean ai token bellow:");
+        let mut user_input = String::new();
+        io::stdin()
+            .read_line(&mut user_input)
+            .expect("Failed to read line");
+        let user_input = user_input.trim();
+
+        let os = env::consts::OS;
+        let data = format!("openai_token = \"{user_input}\"\nsystem = \"plantform:{os}\"");
+        // let data = "openai_token = \"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\"\nsystem = \"plantform:mac_os\"";
+        fs::write(file_path, data).unwrap();
+        exit(0)
+    }
+}
+
+fn get_config()->HashMap<String, String>{
+    let home_dir = dirs::home_dir()
+        .unwrap()
+        .into_os_string()
+        .into_string()
+        .unwrap();
+    let file_path = Path::new(&home_dir).join(".heygpt-config");
+    let toml_data = fs::read_to_string(file_path).unwrap();
+
+    let config: HashMap<String, String> = toml::from_str(&toml_data).unwrap();
+    return config;
+}
+
+fn read_pipe() -> String {
+    // No pipe input detected
     if atty::is(Stream::Stdin) {
         return String::new();
     }
@@ -73,7 +115,7 @@ fn read_pipe()->String{
     // read from pipe
     let stdin = io::stdin();
     let mut stdin_lines = String::new();
-    
+
     for line in stdin.lock().lines() {
         let mut line = line.expect("Could not read line from standard in");
         line.push_str("\n");
@@ -88,17 +130,7 @@ fn call_chat_gpt(messages: &Vec<Message>) -> String {
     let endpoint = String::from("https://api.openai.com/v1/chat/completions");
 
     // get openai api key from HOME_PATH
-    let mut openai_api_key;
-    let mut path = PathBuf::from(std::env::var("HOME").unwrap());
-    path.push(".chatgpt_token");
-    // let contents = fs::read_to_string(path).expect("Should have been able to read ~/.chatgpt_token");
-    let contents = fs::read_to_string(path);
-    let contents = match contents {
-        Ok(context) => context,
-        Err(err) => panic!("~/.chatgpt_token not exist => {err}"),
-    };
-    openai_api_key = contents.clone();
-    openai_api_key = openai_api_key.trim().to_string();
+    let openai_api_key = get_config()["openai_token"].clone();
 
     let playload = ChatGptRequest {
         model: String::from("gpt-3.5-turbo"),
@@ -128,18 +160,19 @@ fn call_chat_gpt(messages: &Vec<Message>) -> String {
 }
 
 fn main() {
+    init_app_config();
+
     // read args
     let args: Vec<String> = env::args().collect();
-    
+
     // stdin from pipe
     let std_lines = read_pipe();
-    if std_lines.len()>0{
-        let mut action:String = String::new();
-        if args.len()>1{
+    if std_lines.len() > 0 {
+        let mut action: String = String::new();
+        if args.len() > 1 {
             action = args[1].clone();
-            
         }
-        let content:String = format!("{action}\n{std_lines}");
+        let content: String = format!("{action}\n{std_lines}");
 
         let messages = vec![Message {
             role: String::from("user"),
@@ -154,10 +187,17 @@ fn main() {
     let quick_chat;
     if args.len() >= 2 {
         quick_chat = args[1].clone();
-        let messages = vec![Message {
-            role: String::from("user"),
-            content: quick_chat,
-        }];
+        let sys_content = get_config()["system"].clone();
+        let messages = vec![
+            Message {
+                role: String::from("system"),
+                content: sys_content,
+            },
+            Message {
+                role: String::from("user"),
+                content: quick_chat,
+            },
+        ];
         let response_content = call_chat_gpt(&messages);
         println!("{response_content}");
         exit(0);
