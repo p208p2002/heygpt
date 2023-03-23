@@ -46,8 +46,8 @@ $ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 ### Debian/Ubuntu
 ```bash
-$ sudo apt install update
-$ sudo apt install build-essential pkg-config openssl libssl-dev
+$ sudo apt-get update
+$ sudo apt-get install build-essential pkg-config openssl libssl-dev
 $ curl https://raw.githubusercontent.com/p208p2002/heygpt/main/setup.sh | sh
 ```
 
