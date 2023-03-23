@@ -38,20 +38,11 @@ $ cat main.py | heygpt "wirte README.md for this script" >> README.md # generate
 ```
 
 ## Installation
-Installing Rust is necessary
-```bash
+Installing Rust is necessary. You can use the following command to install it:
+```
 $ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
-### Build From Src
-1. Clone the repository
-2. Run the executable `cargo build --release`
-3. copy `target/release/heygpt` to `/usr/local/bin`
-
-### macOS
-Comming soon
-
-### Debian/Ubuntu
-Comming soon
-
-### Windows
-Comming soon
+### Debian/Ubuntu/macOS
+```bash
+$ curl https://raw.githubusercontent.com/p208p2002/heygpt/main/setup.sh | sh
+```
