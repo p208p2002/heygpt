@@ -25,7 +25,7 @@ $ heygpt
 ```
 - To quick chat with HeyGpt, use the quick chat command 
 ```bash
-$ heygpt "how to find my id address" # The response will vary based on your system.
+$ heygpt "how to find my ip address" # The response will vary based on your system.
 ```
 
 - To pipe text from another command, use the pipe `|` character followed by `heygpt`, like so:
