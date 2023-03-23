@@ -9,22 +9,7 @@ You can use it to:
 ## Requirements
 Currently, to use HeyGpt you need an API key from OpenAI. You can sign up for that on their website.
 
-## Installation
-### Build From Src
-1. Clone the repository
-2. Run the executable `cargo build --release`
-3. copy `target/release/heygpt` to `/usr/local/bin`
-
-### macOS
-Comming soon
-
-### Debian/Ubuntu
-Comming soon
-
-### Windows
-Comming soon
-
-### Usage
+## Usage
 Please note that you will be prompted to enter your OpenAI API key during initialization, so make sure you have that ready.
 
 You can also modify your configuration file located at `.heygpt-config` in your home directory.
@@ -47,5 +32,26 @@ $ heygpt "how to find my id address" # The response will vary based on your syst
 
 ```bash
 $ vim --help | heygpt "translate to traditional chinese" # cli-tool help message translate
+```
+```bash
 $ cat main.py | heygpt "wirte README.md for this script" >> README.md # generate document for some script
 ```
+
+## Installation
+Installing Rust is necessary
+```bash
+$ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+### Build From Src
+1. Clone the repository
+2. Run the executable `cargo build --release`
+3. copy `target/release/heygpt` to `/usr/local/bin`
+
+### macOS
+Comming soon
+
+### Debian/Ubuntu
+Comming soon
+
+### Windows
+Comming soon
