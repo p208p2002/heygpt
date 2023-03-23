@@ -19,7 +19,7 @@ You can also modify your configuration file located at `.heygpt-config` in your 
 $ heygpt init
 ```
 
-- To chat with GPT-3, simply exec `heygpt` then type your message and press Enter.
+- To chat with ChatGPT, simply exec `heygpt` then type your message and press Enter.
 ```bash 
 $ heygpt
 ```
