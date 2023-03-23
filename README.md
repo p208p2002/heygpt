@@ -31,7 +31,7 @@ You can also modify your configuration file located at `.heygpt-config` in your 
 
 - To initialize your HeyGpt configuration, use the `init` command:
 ```bash
-$ cargo run init
+$ heygpt init
 ```
 
 - To chat with GPT-3, simply exec `heygpt` then type your message and press Enter.
