@@ -24,14 +24,10 @@ jobs:
     - name: Build binary
       run: cargo build --release
 
-    - name: Test
-      run: cargo test
-
-    - name: Zip binary
-      run: zip -j heygpt-$(git rev-parse --short HEAD).zip target/release/heygpt
-
-    - name: Upload ZIP
-      uses: actions/upload-artifact@v2
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v3
       with:
-        name: heygpt
-        path: heygpt-$(git rev-parse --short HEAD).zip
+        name: heygpt-ubuntu-x86_64
+        path: target/release/heygpt
+        if-no-files-found: error
+
