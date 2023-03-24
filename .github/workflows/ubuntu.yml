@@ -1,0 +1,37 @@
+name: Rust Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup Rust environment
+      run: |
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+        export PATH="$HOME/.cargo/bin:$PATH"
+
+    - name: Install dependencies
+      run: cargo build
+
+    - name: Build binary
+      run: cargo build --release
+
+    - name: Test
+      run: cargo test
+
+    - name: Zip binary
+      run: zip -j heygpt-$(git rev-parse --short HEAD).zip target/release/heygpt
+
+    - name: Upload ZIP
+      uses: actions/upload-artifact@v2
+      with:
+        name: heygpt
+        path: heygpt-$(git rev-parse --short HEAD).zip
