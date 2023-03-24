@@ -100,7 +100,15 @@ fn get_config()->HashMap<String, String>{
         .into_string()
         .unwrap();
     let file_path = Path::new(&home_dir).join(".heygpt-config");
-    let toml_data = fs::read_to_string(file_path).unwrap();
+    let toml_data = fs::read_to_string(file_path);
+    let toml_data = match toml_data {
+        Ok(data)=>data,
+        Err(_err)=>{
+            println!("Please run `hetgpt init` to configure api token");
+            println!("Get the token from https://platform.openai.com/account/api-keys");
+            exit(0)
+        }
+    };
 
     let config: HashMap<String, String> = toml::from_str(&toml_data).unwrap();
     return config;
