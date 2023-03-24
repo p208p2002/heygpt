@@ -1,0 +1,32 @@
+name: Rust Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup Rust environment
+      run: |
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+        export PATH="$HOME/.cargo/bin:$PATH"
+
+    - name: Install dependencies
+      run: cargo build
+
+    - name: Build binary
+      run: cargo build --release
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: heygpt-macos-arm64
+        path: target/release/heygpt
+        if-no-files-found: error
