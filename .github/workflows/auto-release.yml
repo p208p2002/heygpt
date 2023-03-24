@@ -43,7 +43,7 @@ jobs:
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         automatic_release_tag: "latest-${{ runner.os }}-${{ runner.arch }}"
-        prerelease: true
+        prerelease: false
         title: "${{ runner.os }}-${{ runner.arch }} Latest Build"
         files: |
             heygpt-${{ runner.os }}-${{ runner.arch }}.tar.gz
