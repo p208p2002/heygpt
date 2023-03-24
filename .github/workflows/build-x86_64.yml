@@ -42,8 +42,8 @@ jobs:
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GH_TOKEN }}"
-        automatic_release_tag: "latest"
+        automatic_release_tag: "latest-${{ matrix.os }}"
         prerelease: true
-        title: "Development Build"
+        title: "${{ matrix.os }} Latest Build"
         files: |
             heygpt-${{ matrix.os }}.tar.gz
