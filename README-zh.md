@@ -1,57 +1,61 @@
 # HeyGPT
-這是一個簡單的命令行介面工具，讓您可以與OpenAI的ChatGPT進行互動。
+這是一個簡單的命令行界面工具，可以讓您與 OpenAI 的 ChatGPT 進行交互。
 
 您可以使用它來：
-- 與ChatGPT聊天並獲得回應
-- 快速聊天並獲得回應
-- 將文本從另一個命令輸出到HeyGpt並獲得回應
+- 與 ChatGPT 聊天並獲得回覆。
+- 快速與 ChatGPT 聊天並獲得回覆。
+- 將文本從其他命令傳遞到 HeyGPT，並獲得回應。
 
-## 要求
-目前，要使用HeyGpt，您需要從OpenAI獲得API密鑰。您可以在其網站上註冊。
+## 前提條件
+目前，要使用 HeyGpt，您需要從 OpenAI 獲得 API 金鑰。您可以在他們的網站上註冊。
 
 ## 用法
-請注意，在初始化期間，您將收到要求輸入OpenAI API密鑰的提示，因此請確保已經準備好。
+請注意，在初始化期間，您將被提示輸入您的 OpenAI API 金鑰，所以請確保您已經準備好了。
 
-您也可以修改位於您的主目錄中的`.heygpt-config`的配置文件。
+您還可以修改位於您的主目錄`.heygpt-config`的配置文件。
 
-- 要初始化您的HeyGpt配置，請使用`init`命令：
+- 若要初始化HeyGpt配置，請使用`init`命令：
 ```bash
 $ heygpt init
 ```
 
-- 要與ChatGPT聊天，只需執行`heygpt`，然後輸入您的消息並按Enter鍵。
+- 與 ChatGPT聊天，只需執行 `heygpt` 然後輸入您的消息並按 Enter。
 ```bash 
 $ heygpt
 ```
-- 要快速聊天與HeyGpt，請使用快速聊天命令
+- 快速與 HeyGpt聊天，使用快速聊天命令
 ```bash
-$ heygpt "如何查找我的ID地址" # 回复將根据您的系統而异。
+$ heygpt "how to find my ip address" # 回答將根據您的系統而有所不同。
 ```
 
-- 要從另一個命令輸出文本，請使用管道`|`字符後跟`heygpt`，如下所示：
+- 要從另一個命令中傳遞文本，請使用管道符“ | ”，然後是“ heygpt”，如下所示：
 
 ```bash
-$ vim --help | heygpt "翻譯成繁體中文" # 將cli工具說明消息翻譯
+$ vim --help | heygpt "translate to traditional chinese" # cli-tool help message translate
 ```
 ```bash
-$ cat main.py | heygpt "為此腳本編寫README.md" >> README.md # 為某些腳本生成文檔
+$ cat main.py | heygpt "wirte README.md for this script" >> README.md # generate document for some script
 ```
 
 ## 安裝
-需要安裝Rust
+
+### Debian / Ubuntu / macOS
+```bash
+$ curl https://raw.githubusercontent.com/p208p2002/heygpt/main/setup.sh | bash
+```
+<!-- 
+### Windows
+TODO -->
+
+### 從源代碼構建
+安裝Rust是必需的。如果您沒有安裝Rust，您可以使用以下命令安裝它：
 ```bash
 $ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
-### 從源碼構建
-1. 克隆存儲庫
-2. 執行可執行文件 `cargo build --release`
-3. 將 `target/release/heygpt` 複製到 `/usr/local/bin`
 
-### macOS
-即將推出
+1. 克隆此存儲庫
 
-### Debian/Ubuntu
-即將推出
+2. 進入 `heygpt` 然後運行命令 `cargo build --release`
+    > 對於Ubuntu還需要安裝：`build-essential`、`pkg-config`、`openssl`、`libssl-dev`、`curl`、`git`
 
-### Windows
-即將推出
+3. 將 `target/release/heygpt` 複製到您的 `PATH` 包含的可執行文件目錄中。
