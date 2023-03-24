@@ -9,6 +9,12 @@
 ## 前提條件
 目前，要使用 HeyGpt，您需要從 OpenAI 獲得 API 金鑰。您可以在他們的網站上註冊。
 
+## 安裝
+### Debian / Ubuntu / macOS
+```bash
+$ curl https://raw.githubusercontent.com/p208p2002/heygpt/main/setup.sh | bash
+```
+
 ## 用法
 請注意，在初始化期間，您將被提示輸入您的 OpenAI API 金鑰，所以請確保您已經準備好了。
 
@@ -37,17 +43,7 @@ $ vim --help | heygpt "translate to traditional chinese" # cli-tool help message
 $ cat main.py | heygpt "wirte README.md for this script" >> README.md # generate document for some script
 ```
 
-## 安裝
-
-### Debian / Ubuntu / macOS
-```bash
-$ curl https://raw.githubusercontent.com/p208p2002/heygpt/main/setup.sh | bash
-```
-<!-- 
-### Windows
-TODO -->
-
-### 從源代碼構建
+## 從源代碼構建
 安裝Rust是必需的。如果您沒有安裝Rust，您可以使用以下命令安裝它：
 ```bash
 $ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
