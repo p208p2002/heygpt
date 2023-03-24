@@ -1,15 +1,22 @@
 #!/bin/bash
-set -e
 
-# Clone repository under /tmp and build binary
-rm -rf /tmp/heygpt
 cd /tmp
-git clone https://github.com/p208p2002/heygpt.git
-cd heygpt
-cargo install --path .
+_ARCH=$(uname -m)
 
-echo "Successfully installed heygpt!"
+if [[ "$OSTYPE" == "linux-gnu"* && "$_ARCH" == "x86_64" ]]; then 
+    wget https://github.com/p208p2002/heygpt/releases/download/latest-Linux-X64/heygpt-Linux-X64.tar.gz
+    tar -xzf heygpt-Linux-X64.tar.gz
+elif [[ "$OSTYPE" == "darwin"* && "$_ARCH" == "x86_64"  ]]; then
+    wget https://github.com/p208p2002/heygpt/releases/download/latest-macOS-X64/heygpt-macOS-X64.tar.gz
+    tar -xzf heygpt-macOS-X64.tar.gz
+elif [[ "$OSTYPE" == "darwin"* && "$_ARCH" == "arm64"  ]]; then
+    wget https://github.com/p208p2002/heygpt/releases/download/latest-macOS-ARM64/heygpt-macOS-ARM64.tar.gz
+    tar -xzf heygpt-macOS-ARM64.tar.gz
+else
+    echo "Heygpt not available for this computer"
+fi
 
-# Cleanup
-cd ..
-rm -rf heygpt
+
+cp target/release/heygpt /usr/local/bin
+
+rm -rf /tmp/target
