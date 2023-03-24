@@ -8,7 +8,11 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
 
     steps:
     - uses: actions/checkout@v2
@@ -24,10 +28,25 @@ jobs:
     - name: Build binary
       run: cargo build --release
 
-    - name: Upload Artifact
+    - name: Compress build artifacts
+      run: tar -czvf heygpt-{{ matrix.os }}.tgz target/release/heygpt
+
+    - name: Upload compressed artifact
       uses: actions/upload-artifact@v3
       with:
-        name: heygpt-ubuntu-x86_64
-        path: target/release/heygpt
+        name: heygpt-{{ matrix.os }}
+        path: heygpt-{{ matrix.os }}.tgz
         if-no-files-found: error
-
+    
+    - name: Publish to GitHub Release
+      if: github.ref == 'refs/heads/main'
+      uses: softprops/action-gh-release@v1
+      with:
+        files: heygpt-{{ matrix.os }}.tgz
+        tag_name: v${{ matrix.os }}
+        title: Release v${{ matrix.os }}
+        body: |
+          Changelog:
+          - Some change
+        prerelease: true
+        draft: true

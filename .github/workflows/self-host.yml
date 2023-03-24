@@ -24,9 +24,12 @@ jobs:
     - name: Build binary
       run: cargo build --release
 
-    - name: Upload Artifact
+    - name: Compress build artifacts
+      run: tar -czvf heygpt-macos-arm64.tgz target/release/heygpt
+
+    - name: Upload compressed artifact
       uses: actions/upload-artifact@v3
       with:
         name: heygpt-macos-arm64
-        path: target/release/heygpt
+        path: heygpt-macos-arm64.tgz
         if-no-files-found: error
