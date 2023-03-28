@@ -5,7 +5,7 @@ use reqwest::blocking::{Client,Response};
 use reqwest::Error;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-use std::{env, result};
+use std::{env};
 use std::fs;
 use std::io::{self, BufRead, Write};
 use std::path::{Path};
