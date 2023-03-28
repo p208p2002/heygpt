@@ -1,5 +1,5 @@
 # HeyGPT
-This is a simple command-line interface tool that allows you to interact with ChatGPT from OpenAI.
+This is a simple command-line interface tool that allows you to interact with ChatGPT from OpenAI or Azure.
 
 You can use it to:
 - Chat with ChatGPT and get responses
@@ -7,7 +7,7 @@ You can use it to:
 - Pipe text from another command into HeyGpt and get responses
 
 ## Requirements
-Currently, to use HeyGpt you need an API key from OpenAI. You can sign up for that on their website.
+Currently, to use HeyGpt you need an API key from OpenAI or Azure. You can sign up for that on their website.
 
 ## Installation
 
@@ -20,13 +20,18 @@ $ curl https://raw.githubusercontent.com/p208p2002/heygpt/main/setup.sh | bash
 TODO -->
 
 ## Usage
-Please note that you will be prompted to enter your OpenAI API key during initialization, so make sure you have that ready.
+Please note that you will be prompted to enter your OpenAI or Azure API key during initialization, so make sure you have that ready.
 
 You can also modify your configuration file located at `.heygpt-config` in your home directory.
 
-- To initialize your HeyGpt configuration, use the `init` command:
+- To initialize your HeyGpt configuration with OpenAI, use the `init` command:
 ```bash
 $ heygpt init
+```
+
+- To initialize your HeyGpt configuration with Azure, use the `init-azure` command:
+```bash
+$ heygpt init-azure
 ```
 
 - To chat with ChatGPT, simply exec `heygpt` then type your message and press Enter.
