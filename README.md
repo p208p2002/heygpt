@@ -9,6 +9,16 @@ You can use it to:
 ## Requirements
 Currently, to use HeyGpt you need an API key from OpenAI. You can sign up for that on their website.
 
+## Installation
+
+### Debian / Ubuntu / macOS
+```bash
+$ curl https://raw.githubusercontent.com/p208p2002/heygpt/main/setup.sh | bash
+```
+<!-- 
+### Windows
+TODO -->
+
 ## Usage
 Please note that you will be prompted to enter your OpenAI API key during initialization, so make sure you have that ready.
 
@@ -37,23 +47,16 @@ $ vim --help | heygpt "translate to traditional chinese" # cli-tool help message
 $ cat main.py | heygpt "wirte README.md for this script" >> README.md # generate document for some script
 ```
 
-## Installation
-Installing Rust, git, and curl is necessary. If you don't have Rust installed, you can install it using the command below:
-```
+## Build From Source
+Installing Rust is necessary. If you don't have Rust installed, you can install it using the command below:
+```bash
 $ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
-> Note: This command installs Rust, but does not install git or curl. You will need to install those separately if they are not already installed on your system.
 
-### Debian/Ubuntu
-```bash
-$ sudo apt-get update
-$ sudo apt-get install build-essential pkg-config openssl libssl-dev curl git
-$ curl https://raw.githubusercontent.com/p208p2002/heygpt/main/setup.sh | sh
-```
+1. Clone this repo
 
-### macOS
-Comming soon
+2. Go into `heygpt` then run command `cargo build --release`
+    > For Ubuntu also install: `build-essential`, `pkg-config`, `openssl`, `libssl-dev`, `curl`, `git`
 
-### Windows
-Comming soon
+3. Copy `target/release/heygpt` to your `PATH`
 

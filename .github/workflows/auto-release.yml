@@ -1,0 +1,49 @@
+name: Rust Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, self-hosted]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup Rust environment
+      run: |
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+        export PATH="$HOME/.cargo/bin:$PATH"
+
+    - name: Install dependencies
+      run: cargo build
+
+    - name: Build binary
+      run: cargo build --release
+
+    - name: Compress build artifacts
+      run: tar -czf heygpt-${{ runner.os }}-${{ runner.arch }}.tar.gz target/release/heygpt
+
+    - name: Upload compressed artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: heygpt-${{ runner.os }}-${{ runner.arch }}
+        path: heygpt-${{ runner.os }}-${{ runner.arch }}.tar.gz
+        if-no-files-found: error
+    
+    - name: Release
+      uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "latest-${{ runner.os }}-${{ runner.arch }}"
+        prerelease: false
+        title: "${{ runner.os }}-${{ runner.arch }} Latest Build"
+        files: |
+            heygpt-${{ runner.os }}-${{ runner.arch }}.tar.gz
